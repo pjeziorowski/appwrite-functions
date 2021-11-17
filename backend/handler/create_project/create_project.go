@@ -126,7 +126,7 @@ func callQoveryApi(name string, userId string) (graphql.Int, graphql.String, err
 	var mutation struct {
 		InsertProjectOne struct {
 			Id graphql.Int
-		} `graphql:"insert_project_one(object: {id: $id, owner_id: $owner_id, qovery_environment_id: $qovery_environment_id, qovery_project_id: $qovery_project_id, url: $url})"`
+		} `graphql:"insert_project_one(object: {owner_id: $owner_id, qovery_environment_id: $qovery_environment_id, qovery_project_id: $qovery_project_id, url: $url})"`
 	}
 	vars := map[string]interface{}{
 		"owner_id":              graphql.String(userId),
