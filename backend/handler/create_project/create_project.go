@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"functions/backend/api"
 	"functions/backend/config"
 	"github.com/hasura/go-graphql-client"
@@ -15,8 +14,8 @@ import (
 )
 
 type ActionPayload struct {
-	SessionVariables map[string]interface{} `json:"session_variables"`
-	Input            CreateProjectArgs      `json:"input"`
+	SessionVariables map[string]string `json:"session_variables"`
+	Input            CreateProjectArgs `json:"input"`
 }
 
 type GraphQLError struct {
@@ -43,7 +42,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// getting user id
-	userId := fmt.Sprintf("%v", actionPayload.SessionVariables["x-hasura-user-id"])
+	userId := actionPayload.SessionVariables["x-hasura-user-id"]
 	if len(userId) > 0 {
 		errorObject := GraphQLError{
 			Message: "user not authenticated",
