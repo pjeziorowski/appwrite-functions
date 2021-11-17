@@ -5,9 +5,9 @@ type CreateProjectInput struct {
 }
 
 type CreateProjectOutput struct {
-	Id   int32
-	Name string
-	Url  string
+	Id   int32  `json:"id"`
+	Name string `json:"name"`
+	Url  string `json:"url"`
 }
 
 type Mutation struct {
