@@ -1,10 +1,10 @@
 package signup
 
 import (
-	"functions/backend/api"
-	"functions/backend/handler/auth"
 	"context"
 	"encoding/json"
+	"functions/backend/api"
+	"functions/backend/handler/auth"
 	"github.com/hasura/go-graphql-client"
 	"golang.org/x/crypto/bcrypt"
 	"io/ioutil"
@@ -84,7 +84,7 @@ func register(email, password string) (graphql.Int, error) {
 	var mutation struct {
 		InsertCreatorsOne struct {
 			Id graphql.Int
-		} `graphql:"insert_creators_one(object: {verified_email: $verified_email, password: $password})"`
+		} `graphql:"insert_user_one(object: {email: $email, password: $password})"`
 	}
 	// encrypting password not to store it in plain text
 	hashed, err := hash([]byte(password))
@@ -92,8 +92,8 @@ func register(email, password string) (graphql.Int, error) {
 		return 0, err
 	}
 	vars := map[string]interface{}{
-		"password":       graphql.String(hashed),
-		"verified_email": graphql.String(email),
+		"password": graphql.String(hashed),
+		"email":    graphql.String(email),
 	}
 
 	// trying to create a new user in Hasura backend

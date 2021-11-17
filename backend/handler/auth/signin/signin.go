@@ -1,11 +1,11 @@
 package signin
 
 import (
-	"functions/backend/api"
-	"functions/backend/handler/auth"
 	"context"
 	"encoding/json"
 	"errors"
+	"functions/backend/api"
+	"functions/backend/handler/auth"
 	"github.com/hasura/go-graphql-client"
 	"golang.org/x/crypto/bcrypt"
 	"io/ioutil"
@@ -86,10 +86,10 @@ func verify(email, password string) (graphql.Int, error) {
 		Creators []struct {
 			Id       graphql.Int
 			Password graphql.String
-		} `graphql:"creators(where: {verified_email: {_eq: $verified_email}})"`
+		} `graphql:"user(where: {email: {_eq: $email}})"`
 	}
 	vars := map[string]interface{}{
-		"verified_email": graphql.String(email),
+		"email": graphql.String(email),
 	}
 
 	// getting user by email
