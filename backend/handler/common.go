@@ -8,7 +8,7 @@ type JwtClaims struct {
 }
 
 type HasuraClaims struct {
-	XHasuraUserId       string `json:"x-hasura-user-id"`
-	XHasuraDefaultRole  string `json:"x-hasura-default-role"`
-	XHasuraAllowedRoles string `json:"x-hasura-allowed-roles"`
+	XHasuraUserId       string   `json:"x-hasura-user-id"`
+	XHasuraDefaultRole  string   `json:"x-hasura-default-role"`
+	XHasuraAllowedRoles []string `json:"x-hasura-allowed-roles"`
 }

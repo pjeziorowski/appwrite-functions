@@ -1,9 +1,9 @@
 package auth
 
 import (
+	"fmt"
 	"functions/backend/config"
 	"functions/backend/handler"
-	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/hasura/go-graphql-client"
 	"time"
@@ -11,7 +11,11 @@ import (
 
 func SignTokenFor(userId graphql.Int) (string, error) {
 	claims := &handler.JwtClaims{
-		handler.HasuraClaims{XHasuraUserId: fmt.Sprintf("%v", userId)},
+		handler.HasuraClaims{
+			XHasuraUserId:       fmt.Sprintf("%v", userId),
+			XHasuraDefaultRole:  "admin",
+			XHasuraAllowedRoles: []string{"admin"},
+		},
 		jwt.StandardClaims{ExpiresAt: time.Now().Add(time.Hour * 72).Unix()},
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
