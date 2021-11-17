@@ -128,7 +128,7 @@ func callQoveryApi(name string, userId string) (graphql.Int, graphql.String, err
 	_, res, err = client.ApplicationsApi.CreateApplication(context.Background(), qe.Id).ApplicationRequest(qovery.ApplicationRequest{
 		Name: "production",
 		GitRepository: qovery.ApplicationGitRepositoryRequest{
-			Url:      "https://github.com/Qovery/appwrite",
+			Url:      "https://github.com/Qovery/appwrite.git",
 			Branch:   &branch,
 			RootPath: "/",
 		},
