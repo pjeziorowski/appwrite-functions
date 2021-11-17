@@ -9,8 +9,8 @@ var (
 	Secret               = os.Getenv("SECRET")
 	HasuraApiUrl         = os.Getenv("HASURA_API_URL")
 	HasuraApiToken       = os.Getenv("HASURA_API_TOKEN")
-	QoveryApiToken       = os.Getenv("QOVERY_API_TOKEN")
-	QoveryOrganizationId = os.Getenv("QOVERY_ORGANIZATION_ID")
+	QoveryApiToken       = os.Getenv("API_TOKEN_QOVERY")
+	QoveryOrganizationId = os.Getenv("ORGANIZATION_ID_QOVERY")
 )
 
 func CheckServerConfig() []error {
@@ -26,10 +26,10 @@ func CheckServerConfig() []error {
 		configErrors = append(configErrors, errors.New("HASURA_API_TOKEN env required"))
 	}
 	if QoveryApiToken == "" {
-		configErrors = append(configErrors, errors.New("QOVERY_API_TOKEN env required"))
+		configErrors = append(configErrors, errors.New("API_TOKEN_QOVERY env required"))
 	}
 	if QoveryOrganizationId == "" {
-		configErrors = append(configErrors, errors.New("QOVERY_ORGANIZATION_ID env required"))
+		configErrors = append(configErrors, errors.New("ORGANIZATION_ID_QOVERY env required"))
 	}
 
 	return configErrors
