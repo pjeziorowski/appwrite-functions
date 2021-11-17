@@ -127,7 +127,7 @@ func callQoveryApi(name string, userId string) (graphql.Int, graphql.String, err
 	var mutation struct {
 		InsertProjectOne struct {
 			Id graphql.Int
-		} `graphql:"insert_project_one(object: {owner_id: $owner_id, qovery_environment_id: $qovery_environment_id, qovery_project_id: $qovery_project_id, url: $url})"`
+		} `graphql:"insert_project_one(object: {owner_id: $owner_id, qovery_environment_id: $qovery_environment_id, qovery_project_id: $qovery_project_id, url: $url, name: $name})"`
 	}
 	i, err := strconv.ParseInt(userId, 10, 32)
 	ownerId := int32(i)
@@ -136,6 +136,7 @@ func callQoveryApi(name string, userId string) (graphql.Int, graphql.String, err
 		"qovery_environment_id": graphql.String(qe.Id),
 		"qovery_project_id":     graphql.String(qp.Id),
 		"url":                   graphql.String("TODO"),
+		"name":                  graphql.String(name),
 	}
 
 	// trying to create a new project in Hasura backend
