@@ -117,10 +117,33 @@ func callQoveryApi(name string, userId string) (graphql.Int, graphql.String, err
 		return 0, "", err
 	}
 	if res.StatusCode >= 400 {
-		return 0, "", errors.New("received " + res.Status + " creating a new project from Qovery API")
+		return 0, "", errors.New("received " + res.Status + " creating a new environment from Qovery API")
 	}
 
-	// TODO create AppWrite app
+	cpu := float32(1)
+	memory := float32(2048)
+	buildMode := "DOCKER"
+	dockerfilePath := "Dockerfile"
+	branch := "main"
+	_, res, err = client.ApplicationsApi.CreateApplication(context.Background(), qe.Id).ApplicationRequest(qovery.ApplicationRequest{
+		Name: "production",
+		GitRepository: qovery.ApplicationGitRepositoryRequest{
+			Url:      "https://github.com/Qovery/appwrite",
+			Branch:   &branch,
+			RootPath: "/",
+		},
+		BuildMode:      &buildMode,
+		DockerfilePath: &dockerfilePath,
+		Cpu:            &cpu,
+		Memory:         &memory,
+	}).Execute()
+	if err != nil {
+		return 0, "", err
+	}
+	if res.StatusCode >= 400 {
+		return 0, "", errors.New("received " + res.Status + " creating a new application from Qovery API")
+	}
+
 	// TODO create Redis
 	// TODO create MariaDB
 
