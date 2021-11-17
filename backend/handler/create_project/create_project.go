@@ -43,7 +43,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 	// getting user id
 	userId := actionPayload.SessionVariables["x-hasura-user-id"]
-	if len(userId) > 0 {
+	if len(userId) == 0 {
 		errorObject := GraphQLError{
 			Message: "user not authenticated",
 		}
