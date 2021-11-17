@@ -129,9 +129,10 @@ func callQoveryApi(name string, userId string) (graphql.Int, graphql.String, err
 			Id graphql.Int
 		} `graphql:"insert_project_one(object: {owner_id: $owner_id, qovery_environment_id: $qovery_environment_id, qovery_project_id: $qovery_project_id, url: $url})"`
 	}
-	ownerId, _ := strconv.Atoi(userId)
+	i, err := strconv.ParseInt(userId, 10, 32)
+	ownerId := int32(i)
 	vars := map[string]interface{}{
-		"owner_id":              ownerId,
+		"owner_id":              graphql.Int(ownerId),
 		"qovery_environment_id": graphql.String(qe.Id),
 		"qovery_project_id":     graphql.String(qp.Id),
 		"url":                   graphql.String("TODO"),
