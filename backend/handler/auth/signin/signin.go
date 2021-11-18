@@ -83,7 +83,7 @@ func signin(args SigninArgs) (response SigninOutput, err error) {
 
 func verify(email, password string) (graphql.Int, error) {
 	var query struct {
-		Creators []struct {
+		User []struct {
 			Id       graphql.Int
 			Password graphql.String
 		} `graphql:"user(where: {email: {_eq: $email}})"`
@@ -97,14 +97,14 @@ func verify(email, password string) (graphql.Int, error) {
 	if err != nil {
 		return 0, err
 	}
-	if len(query.Creators) != 1 {
+	if len(query.User) != 1 {
 		return 0, errors.New("user with email " + email + " not found")
 	}
 
 	// checking password, returning user ID if fine
-	match := compare([]byte(query.Creators[0].Password), []byte(password))
+	match := compare([]byte(query.User[0].Password), []byte(password))
 	if match {
-		return query.Creators[0].Id, nil
+		return query.User[0].Id, nil
 	}
 
 	return 0, errors.New("Password doesn't match. ")
