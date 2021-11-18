@@ -127,8 +127,14 @@ func callQoveryApi(name string, userId string) (graphql.Int, graphql.String, err
 	branch := "main"
 	protocol := "HTTP"
 	accessible := true
+	externalPort := int32(443)
 	ports := []qovery.ApplicationPortRequestPorts{
-		{Name: &protocol, InternalPort: 80, PubliclyAccessible: &accessible, Protocol: protocol},
+		{
+			InternalPort:       80,
+			ExternalPort:       &externalPort,
+			PubliclyAccessible: &accessible,
+			Protocol:           protocol,
+		},
 	}
 	_, res, err = client.ApplicationsApi.CreateApplication(context.Background(), qe.Id).ApplicationRequest(qovery.ApplicationRequest{
 		Name: "appwrite",
