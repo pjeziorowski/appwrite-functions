@@ -125,7 +125,7 @@ func callQoveryApi(id int32) error {
 	var mutation struct {
 		DeleteProjectByPk struct {
 			Id graphql.Int
-		} `graphql:"delete_user_by_pk(object: {owner_id: $owner_id, qovery_environment_id: $qovery_environment_id, qovery_project_id: $qovery_project_id, url: $url, name: $name})"`
+		} `graphql:"delete_project_by_pk(object: {id: $id})"`
 	}
 	vars = map[string]interface{}{
 		"id": graphql.Int(id),
