@@ -6,6 +6,7 @@ import (
 	"functions/backend/handler/auth/signup"
 	"functions/backend/handler/create_project"
 	"functions/backend/handler/start_project"
+	"functions/backend/handler/stop_project"
 	"log"
 	"net/http"
 )
@@ -28,6 +29,7 @@ func main() {
 	mux.HandleFunc("/signup", signup.Handler)
 	mux.HandleFunc("/create_project", create_project.Handler)
 	mux.HandleFunc("/start_project", start_project.Handler)
+	mux.HandleFunc("/stop_project", stop_project.Handler)
 
 	err := http.ListenAndServe(":3000", mux)
 	log.Fatal(err)
