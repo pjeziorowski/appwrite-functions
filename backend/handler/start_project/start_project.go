@@ -97,8 +97,8 @@ func callQoveryApi(id int32) error {
 
 	var query struct {
 		Project []struct {
-			Id                  graphql.Int
-			QoveryEnvironmentId graphql.String `json:"qovery_environment_id"`
+			Id                    graphql.Int
+			Qovery_Environment_Id graphql.String `json:"qovery_environment_id"`
 		} `graphql:"project(where: {id: {_eq: $id}})"`
 	}
 	vars := map[string]interface{}{
@@ -114,7 +114,7 @@ func callQoveryApi(id int32) error {
 		return errors.New("project not found")
 	}
 
-	_, res, err := client.EnvironmentActionsApi.DeployEnvironment(context.Background(), string(query.Project[0].QoveryEnvironmentId)).Execute()
+	_, res, err := client.EnvironmentActionsApi.DeployEnvironment(context.Background(), string(query.Project[0].Qovery_Environment_Id)).Execute()
 	if err != nil {
 		return err
 	}
