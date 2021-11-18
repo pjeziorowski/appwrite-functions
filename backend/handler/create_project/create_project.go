@@ -136,7 +136,7 @@ func callQoveryApi(name string, userId string) (graphql.Int, graphql.String, err
 			Protocol:           protocol,
 		},
 	}
-	_, res, err = client.ApplicationsApi.CreateApplication(context.Background(), qe.Id).ApplicationRequest(qovery.ApplicationRequest{
+	qa, res, err := client.ApplicationsApi.CreateApplication(context.Background(), qe.Id).ApplicationRequest(qovery.ApplicationRequest{
 		Name: "appwrite",
 		GitRepository: qovery.ApplicationGitRepositoryRequest{
 			Url:      "https://github.com/Qovery/appwrite.git",
@@ -156,6 +156,13 @@ func callQoveryApi(name string, userId string) (graphql.Int, graphql.String, err
 		return 0, "", errors.New("received " + res.Status + " creating a new application from Qovery API")
 	}
 
+	links, res, err := client.ApplicationMainCallsApi.ListApplicationLinks(context.Background(), qa.Id).Execute()
+	if err != nil {
+		return 0, "", err
+	}
+	if res.StatusCode >= 400 {
+		return 0, "", errors.New("received " + res.Status + " getting a new application link from Qovery API")
+	}
 	// TODO create Redis
 	// TODO create MariaDB
 
@@ -170,7 +177,7 @@ func callQoveryApi(name string, userId string) (graphql.Int, graphql.String, err
 		"owner_id":              graphql.Int(ownerId),
 		"qovery_environment_id": graphql.String(qe.Id),
 		"qovery_project_id":     graphql.String(qp.Id),
-		"url":                   graphql.String("TODO"),
+		"url":                   graphql.String(links.GetResults()[0].GetUrl()),
 		"name":                  graphql.String(name),
 	}
 
