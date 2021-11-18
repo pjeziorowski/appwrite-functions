@@ -125,6 +125,11 @@ func callQoveryApi(name string, userId string) (graphql.Int, graphql.String, err
 	buildMode := "DOCKER"
 	dockerfilePath := "Dockerfile"
 	branch := "main"
+	protocol := "HTTP"
+	accessible := true
+	ports := []qovery.ApplicationPortRequestPorts{
+		{Name: &protocol, InternalPort: 80, PubliclyAccessible: &accessible, Protocol: protocol},
+	}
 	_, res, err = client.ApplicationsApi.CreateApplication(context.Background(), qe.Id).ApplicationRequest(qovery.ApplicationRequest{
 		Name: "appwrite",
 		GitRepository: qovery.ApplicationGitRepositoryRequest{
@@ -136,6 +141,7 @@ func callQoveryApi(name string, userId string) (graphql.Int, graphql.String, err
 		DockerfilePath: &dockerfilePath,
 		Cpu:            &cpu,
 		Memory:         &memory,
+		Ports:          &ports,
 	}).Execute()
 	if err != nil {
 		return 0, "", err
