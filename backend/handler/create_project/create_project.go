@@ -95,7 +95,7 @@ func createProject(args CreateProjectArgs, userId string) (response CreateProjec
 	return response, nil
 }
 
-func callQoveryApi(name string, userId string) (graphql.Int, graphql.String, error) { // TODO change output type
+func callQoveryApi(name string, userId string) (graphql.Int, graphql.String, error) {
 	cfg := qovery.NewConfiguration()
 	cfg.AddDefaultHeader("Authorization", "Bearer "+config.QoveryApiToken)
 	client := qovery.NewAPIClient(cfg)
@@ -187,5 +187,5 @@ func callQoveryApi(name string, userId string) (graphql.Int, graphql.String, err
 		return 0, "", err
 	}
 
-	return mutation.InsertProjectOne.Id, "TODO", nil
+	return mutation.InsertProjectOne.Id, graphql.String(links.GetResults()[0].GetUrl()), nil
 }
