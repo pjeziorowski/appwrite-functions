@@ -98,7 +98,7 @@ func callQoveryApi(id int32) error {
 	var query struct {
 		Project []struct {
 			Id                  graphql.Int
-			QoveryEnvironmentId graphql.String
+			QoveryEnvironmentId graphql.String `json:"qovery_environment_id"`
 		} `graphql:"project(where: {id: {_eq: $id}})"`
 	}
 	vars := map[string]interface{}{
