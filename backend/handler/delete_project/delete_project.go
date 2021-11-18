@@ -1,4 +1,4 @@
-package stop_project
+package delete_project
 
 import (
 	"context"
@@ -15,7 +15,7 @@ import (
 
 type ActionPayload struct {
 	SessionVariables map[string]string `json:"session_variables"`
-	Input            StopProjectArgs   `json:"input"`
+	Input            DeleteProjectArgs `json:"input"`
 }
 
 type GraphQLError struct {
@@ -54,7 +54,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Send the request params to the Action's generated handler function
-	result, err := stopProject(actionPayload.Input, userId)
+	result, err := deleteProject(actionPayload.Input, userId)
 
 	// throw if an error happens
 	if err != nil {
@@ -72,14 +72,14 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	w.Write(data)
 }
 
-func stopProject(args StopProjectArgs, userId string) (response StopProjectOutput, err error) {
-	log.Printf("received stop project request %v", args)
+func deleteProject(args DeleteProjectArgs, userId string) (response DeleteProjectOutput, err error) {
+	log.Printf("received delete project request %v", args)
 
-	response = StopProjectOutput{
+	response = DeleteProjectOutput{
 		Ok: false,
 	}
 
-	// try to stop a project using Qovery API
+	// try to delete a project using Qovery API
 	err = callQoveryApi(args.Input.Id)
 	if err != nil {
 		return response, err
@@ -97,8 +97,8 @@ func callQoveryApi(id int32) error {
 
 	var query struct {
 		Project []struct {
-			Id                    graphql.Int
-			Qovery_Environment_Id graphql.String `json:"qovery_environment_id"`
+			Id                graphql.Int
+			Qovery_Project_Id graphql.String `json:"qovery_project_id"`
 		} `graphql:"project(where: {id: {_eq: $id}})"`
 	}
 	vars := map[string]interface{}{
@@ -114,12 +114,12 @@ func callQoveryApi(id int32) error {
 		return errors.New("project not found")
 	}
 
-	_, res, err := client.EnvironmentActionsApi.StopEnvironment(context.Background(), string(query.Project[0].Qovery_Environment_Id)).Execute()
+	res, err := client.ProjectMainCallsApi.DeleteProject(context.Background(), string(query.Project[0].Qovery_Project_Id)).Execute()
 	if err != nil {
 		return err
 	}
 	if res.StatusCode >= 400 {
-		return errors.New("received " + res.Status + " creating a new project from Qovery API")
+		return errors.New("received " + res.Status + " deleting a project from Qovery API")
 	}
 
 	return nil

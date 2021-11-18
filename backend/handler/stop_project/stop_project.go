@@ -1,4 +1,4 @@
-package start_project
+package stop_project
 
 import (
 	"context"
@@ -15,7 +15,7 @@ import (
 
 type ActionPayload struct {
 	SessionVariables map[string]string `json:"session_variables"`
-	Input            StartProjectArgs  `json:"input"`
+	Input            StopProjectArgs   `json:"input"`
 }
 
 type GraphQLError struct {
@@ -54,7 +54,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Send the request params to the Action's generated handler function
-	result, err := startProject(actionPayload.Input, userId)
+	result, err := stopProject(actionPayload.Input, userId)
 
 	// throw if an error happens
 	if err != nil {
@@ -72,14 +72,14 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	w.Write(data)
 }
 
-func startProject(args StartProjectArgs, userId string) (response StartProjectOutput, err error) {
-	log.Printf("received start project request %v", args)
+func stopProject(args StopProjectArgs, userId string) (response StopProjectOutput, err error) {
+	log.Printf("received stop project request %v", args)
 
-	response = StartProjectOutput{
+	response = StopProjectOutput{
 		Ok: false,
 	}
 
-	// try to start a project using Qovery API
+	// try to stop a project using Qovery API
 	err = callQoveryApi(args.Input.Id)
 	if err != nil {
 		return response, err
@@ -114,12 +114,12 @@ func callQoveryApi(id int32) error {
 		return errors.New("project not found")
 	}
 
-	_, res, err := client.EnvironmentActionsApi.DeployEnvironment(context.Background(), string(query.Project[0].Qovery_Environment_Id)).Execute()
+	_, res, err := client.EnvironmentActionsApi.StopEnvironment(context.Background(), string(query.Project[0].Qovery_Environment_Id)).Execute()
 	if err != nil {
 		return err
 	}
 	if res.StatusCode >= 400 {
-		return errors.New("received " + res.Status + " starting a project from Qovery API")
+		return errors.New("received " + res.Status + " stopping a project from Qovery API")
 	}
 
 	return nil
