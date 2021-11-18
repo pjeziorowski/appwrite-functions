@@ -122,5 +122,20 @@ func callQoveryApi(id int32) error {
 		return errors.New("received " + res.Status + " deleting a project from Qovery API")
 	}
 
+	var mutation struct {
+		DeleteProjectByPk struct {
+			Id graphql.Int
+		} `graphql:"delete_user_by_pk(object: {owner_id: $owner_id, qovery_environment_id: $qovery_environment_id, qovery_project_id: $qovery_project_id, url: $url, name: $name})"`
+	}
+	vars = map[string]interface{}{
+		"id": graphql.Int(id),
+	}
+
+	// trying to create a new project in Hasura backend
+	err = api.HasuraClient.Mutate(context.Background(), &mutation, vars)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
