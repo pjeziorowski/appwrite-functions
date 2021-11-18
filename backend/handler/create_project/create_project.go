@@ -120,13 +120,13 @@ func callQoveryApi(name string, userId string) (graphql.Int, graphql.String, err
 		return 0, "", errors.New("received " + res.Status + " creating a new environment from Qovery API")
 	}
 
-	cpu := float32(1)
+	cpu := float32(1000)
 	memory := float32(2048)
 	buildMode := "DOCKER"
 	dockerfilePath := "Dockerfile"
 	branch := "main"
 	_, res, err = client.ApplicationsApi.CreateApplication(context.Background(), qe.Id).ApplicationRequest(qovery.ApplicationRequest{
-		Name: "production",
+		Name: "appwrite",
 		GitRepository: qovery.ApplicationGitRepositoryRequest{
 			Url:      "https://github.com/Qovery/appwrite.git",
 			Branch:   &branch,
