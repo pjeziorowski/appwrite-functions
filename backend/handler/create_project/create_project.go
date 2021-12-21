@@ -150,9 +150,11 @@ func callQoveryApi(name string, userId string) (graphql.Int, graphql.String, err
 		Ports:          &ports,
 	}).Execute()
 	if err != nil {
+		log.Println(err.Error())
 		return 0, "", err
 	}
 	if res.StatusCode >= 400 {
+		log.Println(":( H" + string(rune(res.StatusCode)))
 		return 0, "", errors.New("received " + res.Status + " creating a new application from Qovery API")
 	}
 
