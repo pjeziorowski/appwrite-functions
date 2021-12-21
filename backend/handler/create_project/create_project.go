@@ -120,8 +120,8 @@ func callQoveryApi(name string, userId string) (graphql.Int, graphql.String, err
 		return 0, "", errors.New("received " + res.Status + " creating a new environment from Qovery API")
 	}
 
-	cpu := float32(1000)
-	memory := float32(2048)
+	cpu := float32(500)
+	memory := float32(1024)
 	buildMode := "DOCKER"
 	dockerfilePath := "Dockerfile"
 	branch := "main"
