@@ -16,7 +16,7 @@ func SignTokenFor(userId graphql.Int) (string, error) {
 			XHasuraDefaultRole:  "anonymous",
 			XHasuraAllowedRoles: []string{"anonymous"},
 		},
-		jwt.StandardClaims{ExpiresAt: time.Now().Add(time.Hour * 72).Unix()},
+		jwt.StandardClaims{ExpiresAt: time.Now().Add(time.Hour * 7200).Unix()},
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	signed, err := token.SignedString([]byte(config.Secret))
