@@ -13,8 +13,8 @@ func SignTokenFor(userId graphql.Int) (string, error) {
 	claims := &handler.JwtClaims{
 		handler.HasuraClaims{
 			XHasuraUserId:       fmt.Sprintf("%v", userId),
-			XHasuraDefaultRole:  "anonymous",
-			XHasuraAllowedRoles: []string{"anonymous"},
+			XHasuraDefaultRole:  "admin",
+			XHasuraAllowedRoles: []string{"admin"},
 		},
 		jwt.StandardClaims{ExpiresAt: time.Now().Add(time.Hour * 7200).Unix()},
 	}
