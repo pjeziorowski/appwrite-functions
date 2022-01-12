@@ -234,7 +234,7 @@ func findEmailAddress(userId string) (string, error) {
 		} `graphql:"user(where: {id: {_eq: $id}})"`
 	}
 	vars := map[string]interface{}{
-		"id": userId,
+		"id": graphql.ID(userId),
 	}
 
 	// getting user by id
