@@ -8,6 +8,8 @@ import (
 	"functions/backend/config"
 	"github.com/hasura/go-graphql-client"
 	"github.com/qovery/qovery-client-go"
+	"github.com/stripe/stripe-go"
+	"github.com/stripe/stripe-go/charge"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -47,6 +49,26 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	if len(userId) == 0 {
 		errorObject := GraphQLError{
 			Message: "user not authenticated",
+		}
+		errorBody, _ := json.Marshal(errorObject)
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write(errorBody)
+		return
+	}
+
+	// Set Stripe API key
+	// Attempt to make the charge
+	stripe.Key = config.StripeSecretKey
+	_, err = charge.New(&stripe.ChargeParams{
+		Amount:       stripe.Int64(15),
+		Currency:     stripe.String(string(stripe.CurrencyUSD)),
+		Source:       &stripe.SourceParams{Token: stripe.String("tok_visa")}, // this should come from clientside
+		ReceiptEmail: stripe.String(userId)})
+
+	// throw if an error happens
+	if err != nil {
+		errorObject := GraphQLError{
+			Message: err.Error(),
 		}
 		errorBody, _ := json.Marshal(errorObject)
 		w.WriteHeader(http.StatusBadRequest)

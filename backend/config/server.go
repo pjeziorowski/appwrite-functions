@@ -11,6 +11,7 @@ var (
 	HasuraApiToken       = os.Getenv("HASURA_API_TOKEN")
 	QoveryApiToken       = os.Getenv("API_TOKEN_QOVERY")
 	QoveryOrganizationId = os.Getenv("ORGANIZATION_ID_QOVERY")
+	StripeSecretKey      = os.Getenv("STRIPE_SK")
 )
 
 func CheckServerConfig() []error {
@@ -30,6 +31,9 @@ func CheckServerConfig() []error {
 	}
 	if QoveryOrganizationId == "" {
 		configErrors = append(configErrors, errors.New("ORGANIZATION_ID_QOVERY env required"))
+	}
+	if StripeSecretKey == "" {
+		configErrors = append(configErrors, errors.New("STRIPE_SK env required"))
 	}
 
 	return configErrors
