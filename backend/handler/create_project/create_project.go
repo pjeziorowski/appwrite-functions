@@ -231,7 +231,7 @@ func findEmailAddress(userId string) (string, error) {
 		User []struct {
 			Id    graphql.Int
 			Email graphql.String
-		} `graphql:"user(where: {id: {_eq: id}})"`
+		} `graphql:"user(where: {id: {_eq: $id}})"`
 	}
 	vars := map[string]interface{}{
 		"id": userId,
