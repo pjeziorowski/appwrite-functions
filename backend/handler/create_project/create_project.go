@@ -229,7 +229,7 @@ func callQoveryApi(name string, userId string) (graphql.Int, graphql.String, err
 func findEmailAddress(userId string) (string, error) {
 	var query struct {
 		User []struct {
-			Id    graphql.Int
+			Id    graphql.ID
 			Email graphql.String
 		} `graphql:"user(where: {id: {_eq: $id}})"`
 	}
