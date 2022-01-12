@@ -75,7 +75,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		Amount:       stripe.Int64(15),
 		Currency:     stripe.String(string(stripe.CurrencyUSD)),
 		Source:       &stripe.SourceParams{Token: stripe.String("tok_visa")}, // this should come from clientside
-		ReceiptEmail: stripe.String(userId)})
+		ReceiptEmail: &email})
 
 	// throw if an error happens
 	if err != nil {
