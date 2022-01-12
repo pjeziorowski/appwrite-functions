@@ -72,7 +72,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	// Attempt to make the charge
 	stripe.Key = config.StripeSecretKey
 	_, err = charge.New(&stripe.ChargeParams{
-		Amount:       stripe.Int64(15),
+		Amount:       stripe.Int64(1500),
 		Currency:     stripe.String(string(stripe.CurrencyUSD)),
 		Source:       &stripe.SourceParams{Token: stripe.String("tok_visa")}, // this should come from clientside
 		ReceiptEmail: &email})
