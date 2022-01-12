@@ -56,6 +56,18 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	email, err := findEmailAddress(userId)
+	// throw if an error happens
+	if err != nil {
+		errorObject := GraphQLError{
+			Message: err.Error(),
+		}
+		errorBody, _ := json.Marshal(errorObject)
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write(errorBody)
+		return
+	}
+
 	// Set Stripe API key
 	// Attempt to make the charge
 	stripe.Key = config.StripeSecretKey
@@ -212,4 +224,27 @@ func callQoveryApi(name string, userId string) (graphql.Int, graphql.String, err
 	}
 
 	return mutation.InsertProjectOne.Id, graphql.String(links.GetResults()[0].GetUrl()), nil
+}
+
+func findEmailAddress(userId string) (string, error) {
+	var query struct {
+		User []struct {
+			Id    graphql.Int
+			Email graphql.String
+		} `graphql:"user(where: {id: {_eq: id}})"`
+	}
+	vars := map[string]interface{}{
+		"id": userId,
+	}
+
+	// getting user by id
+	err := api.HasuraClient.Query(context.Background(), &query, vars)
+	if err != nil {
+		return "", err
+	}
+	if len(query.User) != 1 {
+		return "", errors.New("user with id " + userId + " not found")
+	}
+
+	return string(query.User[0].Email), nil
 }
